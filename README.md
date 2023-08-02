@@ -1,5 +1,9 @@
 # SfMNeXt: Learning based Structure Prior from Motion Revisited
 
+## 👩‍⚖️ Demo
+
+Models for both outdoor and indoor scenes are available at [HERE](http://cn-nd-plc-1.openfrp.top:56789/)
+
 ## 👀 Training
 
 To train on KITTI, run:
@@ -64,6 +68,13 @@ Download this and unzip into `splits/cityscapes`.
 ```bash
 python test_simple_SQL_config.py ./args_files/args_test_simple_kitti_320x1024.txt
 ```
+## Future Works
+
+- [x] release code for training in outdoor scenes (KITTI, Cityscapes)
+- [x] model release (KITTI, Cityscapes)
+- [ ] code for training in indoor scenes (NYU-Depth-v2, MannequinChallenge)
+- [ ] code for finetuning self-supervised model using metric depth
+- [ ] model release for indoor scenes and metric fine-tuned model
 
 ## 👩‍⚖️ License
 
