@@ -1,0 +1,11 @@
+--data_path /home/Process3/KITTI_depth
+--dataset kitti 
+--eval_split eigen 
+--height 192 
+--width 640
+--batch_size 16
+--num_epochs 30
+--model_dim 64
+--patch_size 16
+--query_nums 120
+

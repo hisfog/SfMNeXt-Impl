@@ -1,0 +1,21 @@
+--data_path /home/Process3/KITTI_depth
+--dataset kitti 
+--eval_split eigen
+--height 192 
+--width 640
+--model_dim 32
+--patch_size 16
+--query_nums 120
+--min_depth 0.001
+--max_depth 80.0
+--eval_mono
+--post_process
+--load_weights_folder /home/Process3/tmp/mdp/lite_res_3_29/weights_20
+--save_pred_disps
+
+
+
+
+
+
+

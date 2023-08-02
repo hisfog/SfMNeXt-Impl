@@ -1,0 +1,14 @@
+--load_weights_folder /home/Process3/tmp/mdp/models_SQLdepth_320x1024_unsup_best/weights_7
+--image_path /home/Process3/image_2
+--height 320 
+--width 1024
+--model_dim 32
+--patch_size 20
+--dim_out 100
+--query_nums 128
+--min_depth 0.001
+--max_depth 80.0
+--ext png
+
+
+

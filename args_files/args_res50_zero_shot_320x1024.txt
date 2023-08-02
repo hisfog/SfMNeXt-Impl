@@ -1,0 +1,23 @@
+--eval_data_path /home/Process3/KITTI_depth/DynamicDepth/data/CS_RAW
+--dataset cityscapes_preprocessed 
+--split cityscapes_preprocessed 
+--eval_split cityscapes 
+--height 320 
+--width 1024
+--batch_size 14
+--num_epochs 25
+--model_dim 32
+--patch_size 20
+--dim_out 128
+--query_nums 128
+--min_depth 0.001
+--max_depth 80.0
+--eval_mono
+--load_weights_folder /home/Process3/tmp/mdp/res50_320x1024_models/weights_15
+--post_process
+
+
+
+
+
+

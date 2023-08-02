@@ -1,0 +1,16 @@
+--data_path /home/Process3/KITTI_depth/DynamicDepth/data/CS
+--dataset cityscapes_preprocessed 
+--split cityscapes_preprocessed 
+--eval_split cityscapes 
+--height 192 
+--width 512
+--batch_size 16
+--num_epochs 30
+--model_dim 56
+--patch_size 16
+--query_nums 128
+--pretrained_pose
+--pose_net_path /home/Process3/tmp/mdp/cityscapes_11_4_models/weights_4/pose.pth
+--min_depth 0.001
+--max_depth 10.0
+--dim_out 128
