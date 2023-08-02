@@ -76,7 +76,7 @@ python test_simple_SQL_config.py ./args_files/args_test_simple_kitti_320x1024.tx
 - [ ] code for finetuning self-supervised model using metric depth
 - [ ] model release for indoor scenes and metric fine-tuned model
 
-## 👩‍⚖️ License
+## License
 
 All rights reserved.
 Please see the [license file](LICENSE) for terms.
