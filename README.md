@@ -1,0 +1,71 @@
+# SfMNeXt: Learning based Structure Prior from Motion Revisited
+
+## 👀 Training
+
+To train on KITTI, run:
+
+```bash
+python train.py ./args_files/args_res50_kitti_192x640_train.txt
+```
+For instructions on downloading the KITTI dataset, see [Monodepth2](https://github.com/nianticlabs/monodepth2)
+
+To train on CityScapes, run:
+
+```bash
+python train.py ./args_files/args_cityscapes_train.txt
+```
+To finetune on CityScapes, run:
+
+```bash
+python train.py ./args_files/args_cityscapes_finetune.txt
+```
+
+For preparing cityscapes dataset, please refer to SfMLearner's [prepare_train_data.py](https://github.com/tinghuiz/SfMLearner/blob/master/data/prepare_train_data.py) script.
+We used the following command:
+
+```bash
+python prepare_train_data.py \
+    --img_height 512 \
+    --img_width 1024 \
+    --dataset_dir <path_to_downloaded_cityscapes_data> \
+    --dataset_name cityscapes \
+    --dump_root <your_preprocessed_cityscapes_path> \
+    --seq_length 3 \
+    --num_threads 8
+```
+
+## 💾 Pretrained weights and evaluation
+
+You can download weights for some pretrained models here:
+
+* [KITTI (640x192)](https://storage.googleapis.com/niantic-lon-static/research/manydepth/models/KITTI_MR.zip)
+* [KITTI (1024x320)](https://storage.googleapis.com/niantic-lon-static/research/manydepth/models/KITTI_HR.zip)
+* [CityScapes (512x192)](https://storage.googleapis.com/niantic-lon-static/research/manydepth/models/CityScapes_MR.zip)
+
+To evaluate a model on KITTI, run:
+
+```bash
+python evaluate_depth_config.py args_files/args_kitti_320x1024_evaluate.config
+```
+
+Make sure you have first run `export_gt_depth.py` to extract ground truth files.
+
+And to evaluate a model on Cityscapes, run:
+
+```bash
+python ./tools/evaluate_depth_cityscapes_config.py args_files/args_res50_cityscapes_finetune_192x640_eval.txt
+```
+
+The ground truth depth files can be found at [HERE](https://storage.googleapis.com/niantic-lon-static/research/manydepth/gt_depths_cityscapes.zip),
+Download this and unzip into `splits/cityscapes`.
+
+## 🖼 Inference on your own iamges
+
+```bash
+python test_simple_SQL_config.py ./args_files/args_test_simple_kitti_320x1024.txt
+```
+
+## 👩‍⚖️ License
+
+All rights reserved.
+Please see the [license file](LICENSE) for terms.
