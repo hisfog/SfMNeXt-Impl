@@ -38,9 +38,9 @@ python prepare_train_data.py \
 
 You can download weights for some pretrained models here:
 
-* [KITTI (640x192)](https://storage.googleapis.com/niantic-lon-static/research/manydepth/models/KITTI_MR.zip)
-* [KITTI (1024x320)](https://storage.googleapis.com/niantic-lon-static/research/manydepth/models/KITTI_HR.zip)
-* [CityScapes (512x192)](https://storage.googleapis.com/niantic-lon-static/research/manydepth/models/CityScapes_MR.zip)
+* [KITTI (640x192)](https://drive.google.com/file/d/1IRo-k56mO0glRuCyHJu2p16RBJGDIx59/view?usp=sharing)
+* [KITTI (1024x320)](https://drive.google.com/file/d/1VH9hMN59eIMjVhUwjYOOxwFN1hsKPIp0/view?usp=sharing)
+* [CityScapes (512x192)](https://drive.google.com/file/d/1nLwTQnXV_9IURUqfCfoGZyVHb4U5XwYI/view?usp=sharing)
 
 To evaluate a model on KITTI, run:
 
