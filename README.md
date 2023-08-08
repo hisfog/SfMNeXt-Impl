@@ -2,7 +2,7 @@
 
 ## 👩‍⚖️ Demo
 
-Models for both outdoor and indoor scenes are available at [HERE](http://cn-nd-plc-1.openfrp.top:56789/)
+Online demo is available at [HERE](http://cn-nd-plc-1.openfrp.top:56789/)
 
 ## 👀 Training
 
@@ -63,7 +63,7 @@ python ./tools/evaluate_depth_cityscapes_config.py args_files/args_res50_citysca
 The ground truth depth files can be found at [HERE](https://storage.googleapis.com/niantic-lon-static/research/manydepth/gt_depths_cityscapes.zip),
 Download this and unzip into `splits/cityscapes`.
 
-## 🖼 Inference on your own iamges
+## 🖼 Inference with your own iamges
 
 ```bash
 python test_simple_SQL_config.py ./args_files/args_test_simple_kitti_320x1024.txt
