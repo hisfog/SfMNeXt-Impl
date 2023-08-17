@@ -1,4 +1,4 @@
-# SfMNeXt: Learning based Structure Prior from Motion Revisited
+# SfMNeXt: The NeXt Series of Learning Structure Prior from Motion
 
 ## 👩‍⚖️ Demo
 
