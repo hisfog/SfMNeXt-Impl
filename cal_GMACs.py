@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 from torchvision.models import resnet18
-
 # from pthflops import count_ops
 from ptflops import get_model_complexity_info
 
@@ -14,15 +13,18 @@ from options import MonodepthOptions
 class SQLdepth(nn.Module):
     def __init__(self, opt):
         super(SQLdepth, self).__init__()
-        self.encoder = networks.LiteResnetEncoderDecoder(model_dim=opt.model_dim)
-        # self.encoder = networks.BaseEncoder.build(model_dim=opt.model_dim)
+        # self.encoder = networks.LiteResnetEncoderDecoder(model_dim=opt.model_dim) # for resnet18
+        self.encoder = networks.ResnetEncoderDecoder(num_layers=opt.num_layers, num_features=opt.num_features, model_dim=opt.model_dim) # for resnet50
+        # self.encoder = networks.Unet(pretrained=False, backbone=opt.backbone, in_channels=3, num_classes=opt.model_dim, decoder_channels=opt.dec_channels)
+
+        # self.depth_decoder = networks.Depth_Decoder_QueryTr(in_channels=opt.model_dim, patch_size=opt.patch_size, dim_out=opt.dim_out, embedding_dim=opt.model_dim, 
+        #                                                         query_nums=opt.query_nums, num_heads=4,
+        #                                                         min_val=opt.min_depth, max_val=opt.max_depth)
         self.depth_decoder = networks.Lite_Depth_Decoder_QueryTr(in_channels=opt.model_dim, patch_size=opt.patch_size, dim_out=opt.dim_out, embedding_dim=opt.model_dim, 
                                                                 query_nums=opt.query_nums, num_heads=4,
                                                                 min_val=opt.min_depth, max_val=opt.max_depth)
     def forward(self, x):
-        # print(x.shape, " 87")
         x = self.encoder(x)
-        # print(x[0].shape, " 90")
         return self.depth_decoder(x)
 
 def convert_arg_line_to_args(arg_line):
@@ -53,4 +55,3 @@ if __name__ == "__main__":
                                                print_per_layer_stat=True, verbose=True)
     print('{:<30}  {:<8}'.format('Computational complexity: ', macs))
     print('{:<30}  {:<8}'.format('Number of parameters: ', params))
-

@@ -15,21 +15,10 @@ from options import MonodepthOptions
 import datasets
 import networks
 from utils import normalize_image
-from tensorboardX import SummaryWriter
+from torch.utils.tensorboard.writer import SummaryWriter
+
 writers = {}
-
-# def normalize_image(x):
-#     """Rescale image pixels to span range [0, 1]
-#     """
-#     ma = float(x.max().cpu().data)
-#     mi = float(x.min().cpu().data)
-#     d = ma - mi if ma != mi else 1e5
-#     return (x - mi) / d
-STEREO_SCALE_FACTOR = 5.4
-DIMS_EMBEDDING = 32
 cv2.setNumThreads(0)  # This speeds up evaluation 5x on our unix systems (OpenCV 3.3.1)
-
-
 splits_dir = os.path.join(os.path.dirname(__file__), "splits")
 
 # Models which were trained with stereo supervision were trained with a nominal
@@ -96,19 +85,25 @@ def evaluate(opt):
 
         dataset = datasets.KITTIRAWDataset(opt.data_path, filenames,
                                            encoder_dict['height'], encoder_dict['width'],
-                                           [0], 4, is_train=False)
-        dataloader = DataLoader(dataset, 16, shuffle=False, num_workers=opt.num_workers,
+                                           [0], 1, is_train=False)
+        dataloader = DataLoader(dataset, 1, shuffle=False, num_workers=opt.num_workers,
                                 pin_memory=True, drop_last=False)
 
-        # encoder = networks.ResnetEncoder(opt.num_layers, False)
-        encoder = networks.BaseEncoder.build(model_dim=opt.model_dim)
-        # depth_decoder = networks.DepthDecoder(encoder.num_ch_enc)
-        depth_decoder = networks.Depth_Decoder_QueryTr(in_channels=opt.model_dim, patch_size=opt.patch_size, dim_out=opt.dim_out, embedding_dim=opt.model_dim, 
-                                                                query_nums=opt.query_nums, num_heads=4,
-                                                                min_val=opt.min_depth, max_val=opt.max_depth)
-        # depth_decoder = networks.Depth_Decoder_QueryTr(DIMS_EMBEDDING, n_query_channels=DIMS_EMBEDDING, patch_size=16,
-        #                                 dim_out=100,
-        #                                 embedding_dim=DIMS_EMBEDDING, norm='linear')
+        if opt.backbone in ["resnet", "resnet_lite"]:
+            encoder = networks.ResnetEncoderDecoder(num_layers=opt.num_layers, num_features=opt.num_features, model_dim=opt.model_dim)
+        elif opt.backbone == "resnet18_lite":
+            encoder = networks.LiteResnetEncoderDecoder(model_dim=opt.model_dim)
+        elif opt.backbone == "eff_b5":
+            encoder = networks.BaseEncoder.build(num_features=opt.num_features, model_dim=opt.model_dim)
+        else: 
+            encoder = networks.Unet(pretrained=(not opt.load_pretrained_model), backbone=opt.backbone, in_channels=3, num_classes=opt.model_dim, decoder_channels=opt.dec_channels)
+
+        if opt.backbone.endswith("_lite"):
+            depth_decoder = networks.Lite_Depth_Decoder_QueryTr(in_channels=opt.model_dim, patch_size=opt.patch_size, dim_out=opt.dim_out, embedding_dim=opt.model_dim, 
+                                                        query_nums=opt.query_nums, num_heads=4, min_val=opt.min_depth, max_val=opt.max_depth)
+        else:
+            depth_decoder = networks.Depth_Decoder_QueryTr(in_channels=opt.model_dim, patch_size=opt.patch_size, dim_out=opt.dim_out, embedding_dim=opt.model_dim, 
+                                                   query_nums=opt.query_nums, num_heads=4, min_val=opt.min_depth, max_val=opt.max_depth)
 
         model_dict = encoder.state_dict()
         encoder.load_state_dict({k: v for k, v in encoder_dict.items() if k in model_dict})
@@ -135,7 +130,6 @@ def evaluate(opt):
                 input_color = data[("color", 0, 0)].cuda()
 
                 if opt.post_process:
-                    # print("post_process *********")
                     # Post-processed results require each image to have two forward passes
                     input_color = torch.cat((input_color, torch.flip(input_color, [3])), 0)
 
@@ -156,7 +150,7 @@ def evaluate(opt):
                                 "attn_{}/{}".format(j, k),
                                 normalize_image(attn[j][k].unsqueeze(0).data), step)
 
-                pred_disp = output[("disp", 0)] # we predict depth
+                pred_disp = output[("disp", 0)]
                 # pred_disp, _ = disp_to_depth(output[("disp", 0)], opt.min_depth, opt.max_depth)
                 pred_disp = pred_disp.cpu()[:, 0].numpy()
 
@@ -236,7 +230,6 @@ def evaluate(opt):
         pred_disp = pred_disps[i]
         pred_disp = cv2.resize(pred_disp, (gt_width, gt_height))
         pred_depth = pred_disp
-        # pred_depth = 1 / pred_disp
 
         if opt.eval_split == "eigen":
             mask = np.logical_and(gt_depth > MIN_DEPTH, gt_depth < MAX_DEPTH)
@@ -301,5 +294,4 @@ if __name__ == "__main__":
     writers["vis"] = SummaryWriter(os.path.join(opt.log_dir, "vis"))
     evaluate(opt)
     # evaluate(options.parse())
-
 
