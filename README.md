@@ -42,14 +42,16 @@ python prepare_train_data.py \
 
 You can download weights for some pretrained models here:
 
-* [KITTI (640x192)](https://drive.google.com/file/d/1IRo-k56mO0glRuCyHJu2p16RBJGDIx59/view?usp=sharing)
-* [KITTI (1024x320)](https://drive.google.com/file/d/1VH9hMN59eIMjVhUwjYOOxwFN1hsKPIp0/view?usp=sharing)
-* [CityScapes (512x192)](https://drive.google.com/file/d/1nLwTQnXV_9IURUqfCfoGZyVHb4U5XwYI/view?usp=sharing)
+| Methods |WxH|abs rel| RMSE |
+| :----------- | :---: | :-----: | :---: |
+[KITTI (ResNet-50)](https://drive.google.com/file/d/1IRo-k56mO0glRuCyHJu2p16RBJGDIx59/view?usp=sharing)|640x192|0.088|4.175|
+[KITTI (ResNet-50)](https://drive.google.com/file/d/1VH9hMN59eIMjVhUwjYOOxwFN1hsKPIp0/view?usp=sharing)|1024x320|0.082|3.914|
+[CityScapes (ResNet-50)](https://drive.google.com/file/d/1nLwTQnXV_9IURUqfCfoGZyVHb4U5XwYI/view?usp=sharing)|512x192|0.106|6.237|
 
 To evaluate a model on KITTI, run:
 
 ```bash
-python evaluate_depth_config.py args_files/args_kitti_320x1024_evaluate.config
+python evaluate_depth_config.py args_files/hisfog/kitti/resnet_320x1024.txt
 ```
 
 Make sure you have first run `export_gt_depth.py` to extract ground truth files.
