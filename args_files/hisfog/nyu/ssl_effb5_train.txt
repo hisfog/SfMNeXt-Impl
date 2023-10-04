@@ -1,0 +1,32 @@
+--data_path /mnt/bn/wyh-ytb-videos/processed/
+--log_dir /mnt/bn/wyh-ytb-videos/tmp/087_try/
+--model_name nyu_debug
+--frame_ids 0 -16 16
+--dataset nyu_raw
+--split nyu_raw 
+--height 480 
+--width 640
+--batch_size 8
+--backbone eff_b5
+--num_epochs 12
+--model_dim 32
+--patch_size 20
+--query_nums 128
+--dim_out 100
+--num_features 2048
+--scheduler_step_size 10
+--min_depth 0.001
+--max_depth 10
+--pretrained_pose
+--pose_net_path /mnt/bn/wyh-ytb-videos/tmp/087_try/naslqocc/models/weights_0/
+--use_rectify_net
+--pretrained_rectify
+--load_pretrained_model
+--load_pt_folder /mnt/bn/wyh-ytb-videos/tmp/087_try/naslqocc/models/weights_0/
+--loss_rt_weight 1.0
+--loss_rc_weight 1.0
+--disparity_smoothness 0.006
+--use_improved_mini_reproj_loss
+--learning_rate 3e-4
+--diff_lr
+

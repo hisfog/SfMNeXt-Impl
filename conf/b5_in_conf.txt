@@ -1,0 +1,14 @@
+--model_type nyu_pth_model
+--model_dim 32
+--patch_size 20
+--dim_out 100
+--query_nums 128
+--num_features 2048
+--max_depth 80
+--load_pretrained_model
+--load_pt_folder /mnt/bn/wyh-ytb-videos/pt_weights/nyu_pth_model
+--height 360
+--width 640
+--image_path /mnt/bn/wyh-ytb-videos/zips/a_set/
+--ext jpg
+

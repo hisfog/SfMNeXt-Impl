@@ -72,8 +72,8 @@ python test_simple_SQL_config.py ./args_files/args_test_simple_kitti_320x1024.tx
 
 - [x] release code for training in outdoor scenes (KITTI, Cityscapes)
 - [x] model release (KITTI, Cityscapes)
-- [ ] code for training in indoor scenes (NYU-Depth-v2, MannequinChallenge)
-- [ ] code for finetuning self-supervised model using metric depth
+- [x] code for training in indoor scenes (NYU-Depth-v2, MannequinChallenge)
+- [x] code for finetuning self-supervised model using metric depth
 - [ ] model release for indoor scenes and metric fine-tuned model
 
 ## License

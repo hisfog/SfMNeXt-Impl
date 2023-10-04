@@ -1,0 +1,31 @@
+--data_path /mnt/bn/wyh-ytb-videos/mc_data/
+--log_dir /mnt/bn/wyh-ytb-videos/tmp/087_try
+--model_name fmmc_3001min
+--frame_ids 0 -8 8
+--intrinsics_file_path ./splits/mc_dataset/KV_intrinsics.txt
+--dataset mc_dataset 
+--split mc_dataset 
+--height 360 
+--width 640
+--batch_size 12
+--num_epochs 12
+--backbone eff_b5
+--model_dim 32
+--patch_size 20
+--query_nums 128
+--dim_out 100
+--num_features 2048
+--scheduler_step_size 10
+--min_depth 0.001
+--max_depth 20.0
+--pretrained_pose
+--pose_net_path /mnt/bn/wyh-ytb-videos/tmp/087_try/fmmc/models/weights_0/
+--load_pretrained_model
+--load_pt_folder /mnt/bn/wyh-ytb-videos/pt_weights/nyu_pth_model
+--loss_rt_weight 1.0
+--loss_rc_weight 1.0
+--disparity_smoothness 0.01
+--use_improved_mini_reproj_loss
+--learning_rate 3e-4
+--diff_lr
+
