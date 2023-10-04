@@ -1,0 +1,24 @@
+--data_path /mnt/bn/hy01/wangyouhong/kitti_zips/
+--log_dir /mnt/bn/videoarc-depthestimation-disk1/wangyouhong/exps/tmp/b7ns
+--model_name cvnXt_075
+--dataset kitti 
+--eval_split eigen 
+--backbone convnext_large
+--height 320 
+--width 1024
+--batch_size 16
+--num_epochs 20
+--scheduler_step_size 10
+--model_dim 32
+--patch_size 32
+--dim_out 64
+--query_nums 64
+--dec_channels 1024 512 256 128
+--min_depth 0.001
+--max_depth 80.0
+--diff_lr
+--use_stereo
+--load_weights_folder /mnt/bn/wyh-ytb-videos/pt_weights/SQL_weights/cvnXt_weights/cvnXt_075
+--eval_mono
+--post_process
+--save_pred_disps

@@ -1,0 +1,24 @@
+--data_path /mnt/bn/hy01/wangyouhong/kitti_zips/
+--log_dir /mnt/bn/hy01/wangyouhong/tmp/stereo_lite_320x1024/
+--model_name resnet_320x1024
+--dataset kitti 
+--eval_split eigen
+--backbone resnet_lite
+--height 320 
+--width 1024
+--batch_size 16
+--num_epochs 25
+--scheduler_step_size 15
+--model_dim 32
+--patch_size 20
+--dim_out 128
+--query_nums 128
+--num_features 256
+--num_layers 50
+--min_depth 0.01
+--max_depth 80.0
+--diff_lr
+--use_stereo
+--load_weights_folder /mnt/bn/wyh-ytb-videos/pt_weights/SQL_weights/
+--eval_mono
+--post_process

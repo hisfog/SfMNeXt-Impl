@@ -1,0 +1,24 @@
+--eval_data_path /home/Process3/KITTI_depth/DynamicDepth/data/CS_RAW
+--dataset cityscapes_preprocessed 
+--split cityscapes_preprocessed 
+--eval_split cityscapes 
+--height 192 
+--width 640
+--batch_size 16
+--num_epochs 5
+--model_dim 64
+--patch_size 16
+--query_nums 120
+--pretrained_pose
+--pose_net_path /home/Process3/tmp/mdp/res50_models/weights_19/pose.pth
+--min_depth 0.01
+--max_depth 80.0
+--learning_rate 1e-6
+--eval_mono
+--load_weights_folder /home/Process3/tmp/mdp/res50_192x640_cityscapes_finetune/weights_4
+--post_process
+--save_pred_disps
+
+
+
+
