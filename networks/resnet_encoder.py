@@ -5,7 +5,7 @@
 # available in the LICENSE file.
 
 from __future__ import absolute_import, division, print_function
-from pyexpat import features
+# from pyexpat import features
 
 import numpy as np
 
@@ -87,23 +87,15 @@ class ResnetEncoder(nn.Module):
             self.num_ch_enc[1:] *= 4
 
     def forward(self, input_image):
-        # input_image: [12, 3, 192, 640]
         self.features = []
         x = (input_image - 0.45) / 0.225
         x = self.encoder.conv1(x)
-        # x: [12, 64, 96, 320]
         x = self.encoder.bn1(x)
-        # x: [12, 64, 96, 320]
         self.features.append(self.encoder.relu(x))
         self.features.append(self.encoder.layer1(self.encoder.maxpool(self.features[-1])))
         self.features.append(self.encoder.layer2(self.features[-1]))
         self.features.append(self.encoder.layer3(self.features[-1]))
         self.features.append(self.encoder.layer4(self.features[-1]))
-        # features[0]:[12, 64, 96, 320] # 1/2
-        # features[1]:[12, 64, 48, 160] # 1/4
-        # features[2]:[12, 128, 24, 80] # 1/8
-        # features[3]:[12, 256, 12, 40] # 1/16
-        # features[4]:[12, 512, 6, 20]  # 1/32
 
         return self.features
 
@@ -126,92 +118,52 @@ class UpSampleBN(nn.Module):
 
 
 class DecoderBN(nn.Module):
-    def __init__(self, num_features=2048, num_classes=1, bottleneck_features=512): # the num_features =512 for res18, 2048 for res50 and efficient
-        # bottleneck_features = 512 for resnet18, 2048 for resnet50 and efficient-b5
+    def __init__(self, num_features=2048, num_classes=1, bottleneck_features=512): 
         super(DecoderBN, self).__init__()
         features = int(num_features)
 
         self.conv2 = nn.Conv2d(bottleneck_features, features, kernel_size=1, stride=1, padding=1)
-
         # for res50
-        # self.up1 = UpSampleBN(skip_input=features // 1 + 1024, output_features=features // 2)
-        # self.up2 = UpSampleBN(skip_input=features // 2 + 512, output_features=features // 4)
-        # self.up3 = UpSampleBN(skip_input=features // 4 + 256, output_features=features // 8)
-        # self.up4 = UpSampleBN(skip_input=features // 8 + 64, output_features=features // 16)
-        # for res18
-        self.up1 = UpSampleBN(skip_input=features // 1 + 256, output_features=features // 2)
-        self.up2 = UpSampleBN(skip_input=features // 2 + 128, output_features=features // 4)
-        self.up3 = UpSampleBN(skip_input=features // 4 + 64, output_features=features // 8)
+        self.up1 = UpSampleBN(skip_input=features // 1 + 1024, output_features=features // 2)
+        self.up2 = UpSampleBN(skip_input=features // 2 + 512, output_features=features // 4)
+        self.up3 = UpSampleBN(skip_input=features // 4 + 256, output_features=features // 8)
         self.up4 = UpSampleBN(skip_input=features // 8 + 64, output_features=features // 16)
 
-        # self.up5 = UpSampleBN(skip_input=features // 16 + 3, output_features=features//16) # for cityscapes
+        # self.up5 = UpSampleBN(skip_input=features // 16 + 3, output_features=features//16)
         self.conv3 = nn.Conv2d(features // 16, num_classes, kernel_size=3, stride=1, padding=1)
         # self.act_out = nn.Softmax(dim=1) if output_activation == 'softmax' else nn.Identity()
 
     def forward(self, features):
         x_block0, x_block1, x_block2, x_block3, x_block4 = features[0], features[1], features[2], features[3], features[4]
-        # print(x_block0.shape, " #0") # torch.Size([2, 64, 176, 352])  #0
-        # print(x_block1.shape, " #1") # torch.Size([2, 256, 88, 176])  #1
-        # print(x_block2.shape, " #2") # torch.Size([2, 512, 44, 88])  #2
-        # print(x_block3.shape, " #3") # torch.Size([2, 1024, 22, 44])  #3
-        # print(x_block4.shape, " #4") # torch.Size([2, 2048, 11, 22])  #4 1/32
-        # torch.Size([2, 64, 176, 352])  #0
-        # torch.Size([2, 64, 88, 176])  #1
-        # torch.Size([2, 128, 44, 88])  #2
-        # torch.Size([2, 256, 22, 44])  #3
-        # torch.Size([2, 512, 11, 22])  #4
-
-        # features[0]:[12, 64, 96, 320] # 1/2
-        # features[1]:[12, 64, 48, 160] # 1/4
-        # features[2]:[12, 128, 24, 80] # 1/8
-        # features[3]:[12, 256, 12, 40] # 1/16
-        # features[4]:[12, 512, 6, 20]  # 1/32
         x_d0 = self.conv2(x_block4)
 
         x_d1 = self.up1(x_d0, x_block3)
         x_d2 = self.up2(x_d1, x_block2)
         x_d3 = self.up3(x_d2, x_block1)
         x_d4 = self.up4(x_d3, x_block0)
-        # x_d5 = self.up5(x_d4, features[0]) # for cityscapes
-        # out = self.conv3(x_d5) # for cityscapes
-        out = self.conv3(x_d4) # for kitti
-        # out = self.act_out(out)
-        # if with_features:
-        #     return out, features[-1]
-        # elif with_intermediate:
-        #     return out, [x_block0, x_block1, x_block2, x_block3, x_block4, x_d1, x_d2, x_d3, x_d4]
+        # x_d5 = self.up5(x_d4, features[0])
+        # out = self.conv3(x_d5)
+        out = self.conv3(x_d4)
         return out
 
 
-class Resnet50EncoderDecoder(nn.Module):
-    def __init__(self, model_dim=128):# n_bins这个参数没用
-        super(Resnet50EncoderDecoder, self).__init__()
-        # self.num_classes = n_bins
-        # self.encoder = ResnetEncoder(num_layers = 50, pretrained = True, num_input_images=1)
-        self.encoder = ResnetEncoder(num_layers = 18, pretrained = True, num_input_images=1)
+class ResnetEncoderDecoder(nn.Module):
+    def __init__(self, num_layers=50, num_features=512, model_dim=32):
+        super(ResnetEncoderDecoder, self).__init__()
+        self.encoder = ResnetEncoder(num_layers = num_layers, pretrained = True, num_input_images=1)
+        self.decoder = DecoderBN(num_features=num_features, num_classes=model_dim, bottleneck_features=2048)
+    def forward(self, x, **kwargs):
+        x = self.encoder(x)
+        return self.decoder(x, **kwargs)
 
-        self.decoder = DecoderBN(num_features=512, num_classes=model_dim)
-        # self.decoder = DecoderBN(num_classes=DIMS_EMBEDDING)
-        # self.conv_out = nn.Sequential(nn.Conv2d(128, n_bins, kernel_size=1, stride=1, padding=0),
-        #                               nn.Softmax(dim=1))
+class Resnet50EncoderDecoder(nn.Module):
+    def __init__(self, model_dim=128):
+        super(Resnet50EncoderDecoder, self).__init__()
+        # for Res50
+        self.encoder = ResnetEncoder(num_layers = 50, pretrained = True, num_input_images=1)
+        self.decoder = DecoderBN(num_features=512, num_classes=model_dim, bottleneck_features=2048)
 
     def forward(self, x, **kwargs):
-        # print(x.shape, " 87")
         x = self.encoder(x)
-        # print(len(x), " 90")
-        # print(x[0].shape, " 90")
         return self.decoder(x, **kwargs)
-        
-if __name__ == '__main__':
-    net = Resnet50EncoderDecoder(model_dim=32)
-    x = torch.rand(2, 3, 352, 704)
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    net.to(device)
-    x = x.to(device)
-    x = net(x)
-# decoder = DecoderBN(num_features=2048, num_classes=32, bottleneck_features=2048)
-# decoder.to(device)
-# x = decoder(x)
-    print(x.shape, " #184")
 
-# print(x.shape)

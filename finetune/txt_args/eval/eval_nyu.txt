@@ -1,0 +1,17 @@
+--data_path /mnt/bn/hy01/data/nyu
+--gt_path /mnt/bn/hy01/data/nyu
+--filenames_file ./finetune/train_test_inputs/nyudepthv2_test_files_with_gt.txt
+--input_height 480
+--input_width 640
+--max_depth 10
+--min_depth 1e-3
+
+--checkpoint_path /mnt/bn/hy01/wangyouhong/tmp/NYU_p2_bs16_4e_6r/checkpoints/p2_bs16_4e_6r_12-Jun_19-24-nodebs16-tep4-lr3.57e-06-wd0.001-3b1ac2a9-1199-42b0-8c6f-e90296bc64f9_best.pt
+--data_path_eval /mnt/bn/hy01/data/nyu
+--gt_path_eval /mnt/bn/hy01/data/nyu
+--filenames_file_eval ./finetune/train_test_inputs/nyudepthv2_test_files_with_gt.txt
+--min_depth_eval 1e-3
+--max_depth_eval 10
+--eigen_crop
+--dataset nyu
+--save_dir predictions_nyu

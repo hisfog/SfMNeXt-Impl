@@ -1,0 +1,30 @@
+--input_height 480
+--input_width 640
+--name ktpt_075
+--root /mnt/bn/videoarc-depthestimation-disk1/wangyouhong/tmp/b7ns_nyu/ktpt_075
+--load_weights_folder /mnt/bn/videoarc-depthestimation-disk1/wangyouhong/exps/tmp/b7ns/cvnXt/models/weights_15/
+--epochs 8
+--bs 16
+--lr 1e-5
+--wd 0.01
+--div_factor 10
+--final_div_factor 100
+--validate_every 250
+--dataset nyu
+--workers 8
+--n_bins 256
+--norm linear
+--w_chamfer 0.1
+--data_path /mnt/bn/hy01/data/nyu
+--gt_path /mnt/bn/hy01/data/nyu
+--filenames_file ./finetune/train_test_inputs/nyudepthv2_train_files_with_gt.txt
+--min_depth 0.001
+--max_depth 10
+--degree 2.5
+--data_path_eval /mnt/bn/hy01/data/nyu
+--gt_path_eval /mnt/bn/hy01/data/nyu
+--filenames_file_eval ./finetune/train_test_inputs/nyudepthv2_test_files_with_gt.txt
+--min_depth_eval 1e-3
+--max_depth_eval 10
+--eigen_crop
+--same_lr

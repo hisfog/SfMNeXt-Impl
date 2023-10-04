@@ -18,6 +18,10 @@ class MonodepthOptions:
         self.parser = argparse.ArgumentParser(description="Monodepthv2 options", fromfile_prefix_chars='@')
 
         # PATHS
+        self.parser.add_argument("--intrinsics_file_path",
+                                 type=str,
+                                 help="path to the camera intrinsics file",
+                                 default='./splits/mc_dataset/KV_intrinsics.txt')
         self.parser.add_argument("--eval_data_path",
                                  type=str,
                                  help="path to the evaluation data",
@@ -39,18 +43,33 @@ class MonodepthOptions:
         self.parser.add_argument("--split",
                                  type=str,
                                  help="which training split to use",
-                                 choices=["eigen_zhou", "eigen_full", "odom", "benchmark", "cityscapes_preprocessed"],
+                                 choices=["eigen_zhou", "eigen_full", "odom", "benchmark", 
+                                          "cityscapes_preprocessed", "mc_dataset", "mc_mini_dataset", "nyu_raw"],
                                  default="eigen_zhou")
+        self.parser.add_argument("--num_features",
+                                 type=int,
+                                 help="resnet or efficient-net feature dim",
+                                 default=512)
         self.parser.add_argument("--num_layers",
                                  type=int,
                                  help="number of resnet layers",
-                                 default=18,
+                                 default=50,
                                  choices=[18, 34, 50, 101, 152])
+        self.parser.add_argument("--dec_channels",
+                                 nargs="+",
+                                 type=int,
+                                 help="decoder channels in Unet",
+                                 default=[1024, 512, 256, 128])
+        self.parser.add_argument("--backbone",
+                                 type=str,
+                                 help="backbone in the Unet",
+                                 default="convnext_large")
         self.parser.add_argument("--dataset",
                                  type=str,
                                  help="dataset to train on",
                                  default="kitti",
-                                 choices=["kitti", "kitti_odom", "kitti_depth", "kitti_test", "cityscapes_preprocessed"])
+                                 choices=["kitti", "kitti_odom", "kitti_depth", "kitti_test", 
+                                          "cityscapes_preprocessed", "mc_dataset", "mc_mini_dataset", "nyu_raw"])
         self.parser.add_argument("--png",
                                  help="if set, trains from raw KITTI png files (instead of jpgs)",
                                  action="store_true",
@@ -66,11 +85,11 @@ class MonodepthOptions:
         self.parser.add_argument("--patch_size",
                                  type=int,
                                  help="patch size before ViT",
-                                 default=16)
+                                 default=20)
         self.parser.add_argument("--model_dim",
                                  type=int,
                                  help="model dim",
-                                 default=64)
+                                 default=32)
         self.parser.add_argument("--height",
                                  type=int,
                                  help="input image height",
@@ -79,6 +98,50 @@ class MonodepthOptions:
                                  type=int,
                                  help="input image width",
                                  default=1024)
+        self.parser.add_argument("--reg_wt",
+                                 type=float,
+                                 help="regularization term weight",
+                                 default=0.01)
+        self.parser.add_argument("--feat_wt",
+                                 type=float,
+                                 help="feature metric loss weight",
+                                 default=0.01)
+        self.parser.add_argument("--l1_weight",
+                                 type=float,
+                                 help="L1 loss weight",
+                                 default=0.15)
+        self.parser.add_argument("--ssim_weight",
+                                 type=float,
+                                 help="SSIM loss weight",
+                                 default=0.85)
+        self.parser.add_argument("--use_mini_reprojection_loss",
+                                 help="if set, uses min_reproj loss in monodepth2 for training",
+                                 action="store_true")
+        self.parser.add_argument("--use_improved_mini_reproj_loss",
+                                 help="if set, uses photometric loss with occ mask for training",
+                                 action="store_true")
+        self.parser.add_argument("--use_photo_geo_loss",
+                                 help="if set, uses photo and geo loss for training",
+                                 action="store_true")
+        self.parser.add_argument("--use_flow_pose",
+                                 help="if set, uses PoseFlow for training",
+                                 action="store_true")
+        self.parser.add_argument("--loss_geo_weight",
+                                 type=float,
+                                 help="geometry loss weight",
+                                 default=1.0)
+        self.parser.add_argument("--loss_photo_weight",
+                                 type=float,
+                                 help="photo loss weight",
+                                 default=1.0)
+        self.parser.add_argument("--loss_rt_weight",
+                                 type=float,
+                                 help="RT loss weight",
+                                 default=1.0)
+        self.parser.add_argument("--loss_rc_weight",
+                                 type=float,
+                                 help="RC loss weight",
+                                 default=1.0)
         self.parser.add_argument("--disparity_smoothness",
                                  type=float,
                                  help="disparity smoothness weight",
@@ -97,6 +160,12 @@ class MonodepthOptions:
                                  type=float,
                                  help="maximum depth",
                                  default=80.0)
+        self.parser.add_argument("--use_optical_flow",
+                                 help="if set, uses optical flow for training",
+                                 action="store_true")
+        self.parser.add_argument("--use_rectify_net",
+                                 help="if set, uses RectifyNey for training",
+                                 action="store_true")
         self.parser.add_argument("--use_stereo",
                                  help="if set, uses stereo pair for training",
                                  action="store_true")
@@ -108,23 +177,45 @@ class MonodepthOptions:
                                  default=[0, -1, 1])
 
         # OPTIMIZATION options
+        self.parser.add_argument("--pretrained_flow",
+                                 help="if set, uses pretrained flow net for training",
+                                 action="store_true")
+        self.parser.add_argument("--pretrained_rectify",
+                                 help="if set, uses pretrained rectify net for training",
+                                 action="store_true")
+        self.parser.add_argument("--load_adam",
+                                 help="if set, uses load adam state for training",
+                                 action="store_true")
+        self.parser.add_argument("--load_pretrained_model",
+                                 help="if set, uses pretrained encoder and depth decoder for training",
+                                 action="store_true")
+        self.parser.add_argument("--load_pt_folder",
+                                 type=str,
+                                 help="path to pretrained model")
         self.parser.add_argument("--pose_net_path",
                                  help="path to pretrained pose net",
                                  type=str,
-                                 default="/home/Process3/tmp/mdp/models_22_6_27/models/weights_19/pose.pth",)
+                                 default="/home/Process3/tmp/mdp/models_22_6_27/models/weights_19/",)
         self.parser.add_argument("--pretrained_pose",
                                  help="if set, uses pretrained posenet for training",
                                  action="store_true")
         self.parser.add_argument("--log_attn",
                                  help="if set, log attn maps in evaluation",
                                  action="store_true")
+        self.parser.add_argument("--multi_gpu",
+                                 help="if set, uses torch.DDP for training",
+                                 action="store_true")
         self.parser.add_argument("--diff_lr",
                                  help="if set, uses different lr for training",
                                  action="store_true")
+        self.parser.add_argument("--accumulation_steps",
+                                 type=int,
+                                 help="accumulation steps",
+                                 default=1)
         self.parser.add_argument("--batch_size",
                                  type=int,
                                  help="batch size",
-                                 default=8)
+                                 default=12)
         self.parser.add_argument("--learning_rate",
                                  type=float,
                                  help="learning rate",
@@ -132,7 +223,7 @@ class MonodepthOptions:
         self.parser.add_argument("--num_epochs",
                                  type=int,
                                  help="number of epochs",
-                                 default=30)
+                                 default=20)
         self.parser.add_argument("--scheduler_step_size",
                                  type=int,
                                  help="step size of the scheduler",
@@ -169,7 +260,7 @@ class MonodepthOptions:
                                  help="normal or shared",
                               #    default="separate_resnet",
                                  default="posecnn",
-                                 choices=["posecnn", "separate_resnet", "shared"])
+                                 choices=["posecnn", "pose_flow", "separate_resnet", "shared"])
 
         # SYSTEM options
         self.parser.add_argument("--no_cuda",
@@ -181,6 +272,14 @@ class MonodepthOptions:
                                  default=8)
 
         # LOADING options
+        self.parser.add_argument("--pred_metric_depth",
+                                help='if set, predicts metric depth instead of disparity. (This only '
+                                     'makes sense for stereo-trained KITTI models).',
+                                action='store_true')
+        self.parser.add_argument('--ext', type=str,
+                                help='image extension to search for in folder', default="png")
+        self.parser.add_argument('--image_path', type=str,
+                                help='path to a test image or folder of images')
         self.parser.add_argument("--load_weights_folder",
                                  type=str,
                                  help="name of model to load")

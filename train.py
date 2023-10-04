@@ -1,15 +1,10 @@
 # from __future__ import absolute_import, division, print_function
-
-# from trainer_cityscapes import Trainer
-# from trainer_debug_city import Trainer # for cityscapes
-from trainer_res50_kitti import Trainer # for kitti and res50
-# from trainer_lite import Trainer # for lite version
+from trainer import Trainer
 from options import MonodepthOptions
 import sys
 import argparse
 
 options = MonodepthOptions()
-# opts = options.parse()
 
 def convert_arg_line_to_args(arg_line):
     for arg in arg_line.split():

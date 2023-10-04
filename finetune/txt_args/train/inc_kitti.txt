@@ -1,0 +1,30 @@
+--name cvnXt_075_8_29
+--root /mnt/bn/videoarc-depthestimation-disk1/wangyouhong/tmp/inc_kitti_exps
+--load_weights_folder /mnt/bn/videoarc-depthestimation-disk1/wangyouhong/exps/tmp/b7ns/cvnXt/models/weights_15
+--epochs 5
+--bs 16
+--lr 1e-5
+--wd 0.01
+--div_factor 10
+--final_div_factor 100
+--validate_every 250
+--dataset kitti
+--workers 8
+--w_chamfer 0
+--data_path /mnt/bn/hy01/wangyouhong/kitti_zips/
+--gt_path /mnt/bn/videoarc-depthestimation-disk1/wangyouhong/kitti_annotated/
+--filenames_file ./finetune/train_test_inputs/kitti_eigen_train_files_with_gt.txt
+--input_height 320
+--input_width 1024
+--min_depth 0.001
+--max_depth 80
+--do_random_rotate
+--degree 1.0
+--data_path_eval /mnt/bn/hy01/wangyouhong/kitti_zips/
+--gt_path_eval /mnt/bn/videoarc-depthestimation-disk1/wangyouhong/kitti_annotated/
+--filenames_file_eval ./finetune/train_test_inputs/kitti_eigen_test_files_with_gt.txt
+--min_depth_eval 1e-3
+--max_depth_eval 80
+--do_kb_crop
+--garg_crop
+--same_lr
