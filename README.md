@@ -44,8 +44,8 @@ You can download weights for some pretrained models here:
 
 | Methods |WxH|abs rel| RMSE |
 | :----------- | :---: | :-----: | :---: |
-[KITTI (ResNet-50)](https://drive.google.com/file/d/1IRo-k56mO0glRuCyHJu2p16RBJGDIx59/view?usp=sharing)|640x192|0.088|4.175|
-[KITTI (ResNet-50)](https://drive.google.com/file/d/1VH9hMN59eIMjVhUwjYOOxwFN1hsKPIp0/view?usp=sharing)|1024x320|0.082|3.914|
+[KITTI (ResNet-50)](https://drive.google.com/file/d/1_BHfGXqVsE4RrCM58_5nEzQHJmyxDsQO/view?usp=drive_link)|640x192|0.088|4.175|
+[KITTI (ResNet-50)](https://drive.google.com/file/d/1NaN8F3gPU2vY38KtYFDSAw4Hbye5Z5AG/view?usp=drive_link)|1024x320|0.082|3.914|
 [CityScapes (ResNet-50)](https://drive.google.com/file/d/1nLwTQnXV_9IURUqfCfoGZyVHb4U5XwYI/view?usp=sharing)|512x192|0.106|6.237|
 
 To evaluate a model on KITTI, run:
