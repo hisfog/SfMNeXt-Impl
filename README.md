@@ -46,6 +46,7 @@ You can download weights for some pretrained models here:
 | :----------- | :---: | :-----: | :---: |
 [KITTI (ResNet-50)](https://drive.google.com/file/d/1_BHfGXqVsE4RrCM58_5nEzQHJmyxDsQO/view?usp=drive_link)|640x192|0.088|4.175|
 [KITTI (ResNet-50)](https://drive.google.com/file/d/1NaN8F3gPU2vY38KtYFDSAw4Hbye5Z5AG/view?usp=drive_link)|1024x320|0.082|3.914|
+[KITTI (Efficient-b5)](https://drive.google.com/file/d/1T_4N09icldOWdS1_w3ge-9Zf7_Fb4Ogt/view?usp=drive_link)|1024x320|0.080|3.777|
 [CityScapes (ResNet-50)](https://drive.google.com/file/d/1nLwTQnXV_9IURUqfCfoGZyVHb4U5XwYI/view?usp=sharing)|512x192|0.106|6.237|
 [KITTI (ConvNeXt-L)](https://drive.google.com/file/d/14Hb8UsjraLWk1TvtMPd5moEDMlDxiHkC/view?usp=drive_link)|1024x320|0.043|1.698|
 
