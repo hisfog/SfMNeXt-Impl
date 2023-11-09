@@ -58,14 +58,27 @@ python evaluate_depth_config.py args_files/hisfog/kitti/resnet_320x1024.txt
 
 Make sure you have first run `export_gt_depth.py` to extract ground truth files.
 
+To evaluate the ConvNeXt-L model (fine-tuned using metric depth), run:
+
+```bash
+python3 ./finetune/evaluate_metric_depth.py ./finetune/txt_args/eval/eval_kitti.txt ./conf/cvnXt.txt
+```
+
 And to evaluate a model on Cityscapes, run:
 
 ```bash
 python ./tools/evaluate_depth_cityscapes_config.py args_files/args_res50_cityscapes_finetune_192x640_eval.txt
 ```
 
-The ground truth depth files can be found at [HERE](https://storage.googleapis.com/niantic-lon-static/research/manydepth/gt_depths_cityscapes.zip),
+The ground truth depth files for Cityscapes can be found at [HERE](https://storage.googleapis.com/niantic-lon-static/research/manydepth/gt_depths_cityscapes.zip),
 Download this and unzip into `splits/cityscapes`.
+
+To get ground truth depth for KITTI, run:
+
+```bash
+python export_gt_depth.py --data_path kitti_data --split eigen
+python export_gt_depth.py --data_path kitti_data --split eigen_benchmark
+```
 
 ## 🖼 Inference with your own iamges
 
