@@ -80,7 +80,7 @@ python export_gt_depth.py --data_path kitti_data --split eigen
 python export_gt_depth.py --data_path kitti_data --split eigen_benchmark
 ```
 
-## 🖼 Inference with your own iamges
+## 🖼 Inference with your own images
 
 ```bash
 python test_simple_SQL_config.py ./args_files/args_test_simple_kitti_320x1024.txt
