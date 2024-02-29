@@ -1,10 +1,21 @@
 # SfMNeXt: The NeXt Series of Learning Structure Prior from Motion
 
-## 👩‍⚖️ Demo
+Official implementation of ["SQLdepth: Generalizable Self-Supervised Fine-Structured Monocular Depth Estimation"](https://arxiv.org/abs/2309.00526) [AAAI 2024], and more.
 
-Online demo is available at [HERE](http://cn-nd-plc-1.openfrp.top:56789/)
+## Updates
+***2023.09.28*** One paper accepted by **AAAI 2024**!
 
-## 👀 Training
+***2023.09.03*** Submitted the preprint of SQLdepth to [Arxiv](https://arxiv.org/abs/2309.00526).
+
+## Upcoming releases
+
+- [x] release code for training in outdoor scenes (KITTI, Cityscapes)
+- [x] model release (KITTI, Cityscapes)
+- [x] code for training in indoor scenes (NYU-Depth-v2, MannequinChallenge)
+- [x] code for finetuning self-supervised model using metric depth
+- [ ] model release for indoor scenes and metric fine-tuned model
+
+## Training
 
 To train on KITTI, run:
 
@@ -85,13 +96,6 @@ python export_gt_depth.py --data_path kitti_data --split eigen_benchmark
 ```bash
 python test_simple_SQL_config.py ./args_files/args_test_simple_kitti_320x1024.txt
 ```
-## Future Works
-
-- [x] release code for training in outdoor scenes (KITTI, Cityscapes)
-- [x] model release (KITTI, Cityscapes)
-- [x] code for training in indoor scenes (NYU-Depth-v2, MannequinChallenge)
-- [x] code for finetuning self-supervised model using metric depth
-- [ ] model release for indoor scenes and metric fine-tuned model
 
 ## License
 
