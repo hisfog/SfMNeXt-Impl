@@ -1,6 +1,7 @@
 --data_path /mnt/bn/hy01/wangyouhong/kitti_zips/
 --log_dir /mnt/bn/hy01/wangyouhong/tmp/effb5_320x1024/
 --model_name effb5_320x1024
+--model_type hrb5
 --dataset kitti 
 --eval_split eigen
 --backbone tf_efficientnet_b5_ap
